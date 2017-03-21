@@ -1,0 +1,42 @@
+hash: 5452f58aeec8bda597027693fe70d1502cdcec03f4d2268330e72c322f3f3869
+updated: 2017-03-21T10:33:40.621910974-04:00
+imports:
+- name: github.com/alecthomas/template
+  version: 14fd436dd20c3cc65242a9f396b61bfc8a3926fc
+  subpackages:
+  - parse
+- name: github.com/alecthomas/units
+  version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
+- name: github.com/coreos/go-systemd
+  version: 48702e0da86bd25e76cfef347e2adeb434a0d0a6
+  subpackages:
+  - dbus
+- name: github.com/coreos/pkg
+  version: 3ac0863d7acf3bc44daf49afef8919af12f704ef
+  subpackages:
+  - dlopen
+- name: github.com/godbus/dbus
+  version: fe0e1d54eaeda11a9979659a8d32f459e88bee75
+- name: github.com/pkg/errors
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: golang.org/x/crypto
+  version: 459e26527287adbc2adcc5d0d49abff9a5f315a7
+  subpackages:
+  - ssh/terminal
+- name: golang.org/x/net
+  version: 8968c61983e8f51a91b8c0ef25bf739278c89634
+  subpackages:
+  - context
+- name: golang.org/x/text
+  version: f28f36722d5ef2f9655ad3de1f248e3e52ad5ebd
+  subpackages:
+  - encoding
+- name: golang.org/x/tools
+  version: 23ca8a2633c38bca2a2fd4d0c0f8523a2f266d65
+  subpackages:
+  - go/buildutil
+- name: gopkg.in/alecthomas/kingpin.v2
+  version: e9044be3ab2a8e11d4e1f418d12f0790d57e8d70
+- name: gopkg.in/yaml.v1
+  version: 9f9df34309c04878acc86042b16630b0f696e1de
+testImports: []

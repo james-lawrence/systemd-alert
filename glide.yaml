@@ -1,0 +1,28 @@
+package: github.com/james-lawrence/systemd-alert
+import:
+- package: github.com/coreos/go-systemd
+  version: ~14.0.0
+  subpackages:
+  - dbus
+- package: github.com/pkg/errors
+  version: ~0.8.0
+- package: github.com/coreos/pkg
+  version: ~3.0.0
+  subpackages:
+  - dlopen
+- package: golang.org/x/crypto
+  subpackages:
+  - ssh/terminal
+- package: gopkg.in/yaml.v1
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: golang.org/x/text
+  subpackages:
+  - encoding
+- package: golang.org/x/tools
+  subpackages:
+  - go/buildutil
+- package: gopkg.in/alecthomas/kingpin.v2
+  version: ~2.2.3
+- package: github.com/alecthomas/template
