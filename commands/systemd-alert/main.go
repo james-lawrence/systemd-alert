@@ -61,6 +61,6 @@ func subscribeToSignals(conn *dbus.Conn) (<-chan map[string]*dbus.UnitStatus, <-
 		return nil, nil, errors.Wrap(err, "failed to subscribe to system signals")
 	}
 
-	unitStatus, errChan := conn.SubscribeUnits(time.Second)
+	unitStatus, errChan := conn.SubscribeUnits(time.Microsecond)
 	return unitStatus, errChan, nil
 }
