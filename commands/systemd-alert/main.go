@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 
@@ -52,15 +51,6 @@ done:
 	shutdown()
 }
 
-func subscribeToSignals(conn *dbus.Conn) (<-chan map[string]*dbus.UnitStatus, <-chan error, error) {
-	var (
-		err error
-	)
-
-	if err = conn.Subscribe(); err != nil {
-		return nil, nil, errors.Wrap(err, "failed to subscribe to system signals")
-	}
-
-	unitStatus, errChan := conn.SubscribeUnits(time.Microsecond)
-	return unitStatus, errChan, nil
+func subscribeToSignals(conn *dbus.Conn) error {
+	return errors.Wrap(conn.Subscribe(), "failed to subscribe to system signals")
 }

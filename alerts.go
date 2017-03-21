@@ -3,6 +3,7 @@ package alerts
 import (
 	"log"
 	"strings"
+	"time"
 
 	"github.com/coreos/go-systemd/dbus"
 )
@@ -11,20 +12,29 @@ type notifier interface {
 	Alert(units ...*dbus.UnitStatus)
 }
 
-// Run - runs alerts
-func Run(a notifier, unitEvents <-chan map[string]*dbus.UnitStatus, errs <-chan error) {
-	var (
-		err error
-	)
+func isChanged(match filter) func(*dbus.UnitStatus, *dbus.UnitStatus) bool {
+	return func(oldu, newu *dbus.UnitStatus) bool {
+		// if new state matches then use new unit.
+		return match(newu) && *oldu != *newu
+	}
+}
 
+// Run - runs alerts
+func Run(conn *dbus.Conn, a notifier) {
+	var (
+		err        error
+		unitEvents <-chan map[string]*dbus.UnitStatus
+		errs       <-chan error
+	)
+	matcher := or(FilterAutorestart, FilterFailed)
+	unitEvents, errs = conn.SubscribeUnitsCustom(time.Second, 0, isChanged(matcher), nil)
 	log.Printf("running %T\n", a)
-	match := or(FilterAutorestart, FilterFailed)
 	for {
 		select {
 		case event := <-unitEvents:
 			units := make([]*dbus.UnitStatus, 0, len(event))
 			for _, unit := range event {
-				if unit != nil && match(unit) {
+				if unit != nil && matcher(unit) {
 					units = append(units, unit)
 				}
 			}

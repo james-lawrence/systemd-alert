@@ -4,7 +4,6 @@ import (
 	"github.com/coreos/go-systemd/dbus"
 	"github.com/james-lawrence/systemd-alert"
 	"github.com/james-lawrence/systemd-alert/notifications/slack"
-	"github.com/pkg/errors"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -24,15 +23,13 @@ func (t *slackAlert) configure(cmd *kingpin.CmdClause) {
 
 func (t *slackAlert) execute(c *kingpin.ParseContext) error {
 	var (
-		err   error
-		units <-chan map[string]*dbus.UnitStatus
-		errs  <-chan error
+		err error
 	)
 
-	if units, errs, err = subscribeToSignals(t.conn); err != nil {
-		return errors.Wrap(err, "failed to subscribe to systemd events")
+	if err = subscribeToSignals(t.conn); err != nil {
+		return err
 	}
 
-	go alerts.Run(t.Alerter, units, errs)
+	go alerts.Run(t.conn, t.Alerter)
 	return nil
 }
