@@ -1,15 +1,17 @@
 package main
 
 import (
-	"github.com/coreos/go-systemd/dbus"
+	"time"
+
 	"github.com/james-lawrence/systemd-alert"
 	"github.com/james-lawrence/systemd-alert/notifications/slack"
+	"github.com/james-lawrence/systemd-alert/systemd"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
 type slackAlert struct {
 	Alerter slack.Alerter
-	conn    *dbus.Conn
+	conn    *systemd.Conn
 }
 
 func (t *slackAlert) configure(cmd *kingpin.CmdClause) {
@@ -22,14 +24,6 @@ func (t *slackAlert) configure(cmd *kingpin.CmdClause) {
 }
 
 func (t *slackAlert) execute(c *kingpin.ParseContext) error {
-	var (
-		err error
-	)
-
-	if err = subscribeToSignals(t.conn); err != nil {
-		return err
-	}
-
-	go alerts.Run(t.conn, t.Alerter)
+	go alerts.Run(t.conn, t.Alerter, alerts.AlertFrequency(5*time.Second))
 	return nil
 }

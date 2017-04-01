@@ -1,5 +1,5 @@
-hash: 5452f58aeec8bda597027693fe70d1502cdcec03f4d2268330e72c322f3f3869
-updated: 2017-03-21T10:33:40.621910974-04:00
+hash: 29d5d4862633bf794d6e9762ee1d22fddaa259ccdadc22a777e1dad57bc616f8
+updated: 2017-04-01T13:40:15.530200312-04:00
 imports:
 - name: github.com/alecthomas/template
   version: 14fd436dd20c3cc65242a9f396b61bfc8a3926fc
@@ -11,10 +11,6 @@ imports:
   version: 48702e0da86bd25e76cfef347e2adeb434a0d0a6
   subpackages:
   - dbus
-- name: github.com/coreos/pkg
-  version: 3ac0863d7acf3bc44daf49afef8919af12f704ef
-  subpackages:
-  - dlopen
 - name: github.com/godbus/dbus
   version: fe0e1d54eaeda11a9979659a8d32f459e88bee75
 - name: github.com/pkg/errors

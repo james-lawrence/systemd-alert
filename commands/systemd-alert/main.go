@@ -9,7 +9,7 @@ import (
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 
-	"github.com/coreos/go-systemd/dbus"
+	"github.com/james-lawrence/systemd-alert/systemd"
 	"github.com/pkg/errors"
 )
 
@@ -17,17 +17,19 @@ func main() {
 	var (
 		pcmd        string
 		err         error
-		conn        *dbus.Conn
+		conn        *systemd.Conn
 		_, shutdown = context.WithCancel(context.Background())
 	)
 
-	if conn, err = dbus.NewSystemConnection(); err != nil {
+	if conn, err = systemd.NewSystemConnection(); err != nil {
 		log.Fatalln(errors.Wrap(err, "failed to open systemd connection"))
 	}
 
 	app := kingpin.New("systemd-alert", "monitoring around systemd")
 	cmd := app.Command("slack", "send alerts to slack")
 	(&slackAlert{conn: conn}).configure(cmd)
+	cmd = app.Command("debug", "debug to stderr")
+	(&debugAlert{conn: conn}).configure(cmd)
 
 	if pcmd, err = app.Parse(os.Args[1:]); err != nil {
 		log.Fatalln(pcmd, errors.Wrap(err, "failed to parse commandline"))
@@ -49,8 +51,4 @@ func main() {
 
 done:
 	shutdown()
-}
-
-func subscribeToSignals(conn *dbus.Conn) error {
-	return errors.Wrap(conn.Subscribe(), "failed to subscribe to system signals")
 }
