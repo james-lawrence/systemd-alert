@@ -24,13 +24,21 @@ type runOption func(*RunConfig)
 
 // RunConfig run configuration options
 type RunConfig struct {
-	Frequency time.Duration
+	Frequency       time.Duration
+	IgnoredServices []string
 }
 
 // AlertFrequency how often to dump the alerts.
 func AlertFrequency(d time.Duration) func(*RunConfig) {
 	return func(c *RunConfig) {
 		c.Frequency = d
+	}
+}
+
+// AlertIgnoreServices services to be ignored.
+func AlertIgnoreServices(services ...string) func(*RunConfig) {
+	return func(c *RunConfig) {
+		c.IgnoredServices = services
 	}
 }
 
@@ -51,7 +59,10 @@ func Run(conn *systemd.Conn, a notifier, options ...runOption) {
 		return
 	}
 
-	matcher := or(FilterAutorestart, FilterFailed)
+	matcher := and(
+		IgnoreServices(config.IgnoredServices...),
+		or(FilterAutorestart, FilterFailed),
+	)
 	log.Printf("running %T\n", a)
 
 	batch := make(map[string]*systemd.UnitStatus)
@@ -73,6 +84,10 @@ func Run(conn *systemd.Conn, a notifier, options ...runOption) {
 				batch[event.Name] = event
 			}
 		case _ = <-ticker.C:
+			if len(batch) == 0 {
+				continue
+			}
+
 			events := make([]*systemd.UnitStatus, 0, len(batch))
 			for _, unit := range batch {
 				events = append(events, unit)
@@ -152,10 +167,32 @@ func or(filters ...filter) filter {
 	}
 }
 
+func and(filters ...filter) filter {
+	return func(unit *systemd.UnitStatus) bool {
+		result := true
+		for _, filter := range filters {
+			result = result && filter(unit)
+		}
+		return result
+	}
+}
+
 func filterByName(name string) filter {
 	return func(status *systemd.UnitStatus) bool {
 		log.Println("filtering by name", strings.ToLower(name), strings.ToLower(status.Name))
 		return strings.ToLower(name) == strings.ToLower(status.Name)
+	}
+}
+
+// IgnoreServices ignore the provided services.
+func IgnoreServices(names ...string) func(*systemd.UnitStatus) bool {
+	ignore := make(map[string]bool, len(names))
+	for _, name := range names {
+		ignore[name] = true
+	}
+
+	return func(status *systemd.UnitStatus) bool {
+		return !(ignore[status.Name])
 	}
 }
 
