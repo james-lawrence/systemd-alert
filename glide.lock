@@ -1,16 +1,14 @@
-hash: 222459aaf89c9f63644fe33a1ed5673e09dcf069b48cd0b122fc0ff61870ba01
-updated: 2017-04-12T19:30:53.466639409-04:00
+hash: e207f69bc34a90656f3763942ed875d52049b0bbfb3d37889561bd8a944bb152
+updated: 2017-04-12T21:09:45.126927315-04:00
 imports:
+- name: github.com/0xAX/notificator
+  version: 82e921414e037b057d5f9c5c8b9a8313dfa584de
 - name: github.com/alecthomas/template
   version: 14fd436dd20c3cc65242a9f396b61bfc8a3926fc
   subpackages:
   - parse
 - name: github.com/alecthomas/units
   version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
-- name: github.com/coreos/go-systemd
-  version: 48702e0da86bd25e76cfef347e2adeb434a0d0a6
-  subpackages:
-  - dbus
 - name: github.com/godbus/dbus
   version: fe0e1d54eaeda11a9979659a8d32f459e88bee75
 - name: github.com/naoina/go-stringutil

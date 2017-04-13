@@ -11,6 +11,9 @@ import (
 	"github.com/naoina/toml/ast"
 	"github.com/pkg/errors"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
+
+	// load native into the registry.
+	_ "github.com/james-lawrence/systemd-alert/notifications/native"
 )
 
 type _default struct {

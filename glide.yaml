@@ -21,3 +21,4 @@ import:
 - package: github.com/alecthomas/units
 - package: github.com/naoina/toml
 - package: github.com/naoina/go-stringutil
+- package: github.com/0xAX/notificator
