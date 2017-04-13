@@ -1,4 +1,4 @@
-package debug
+package native
 
 import (
 	"log"
@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	notifications.Add("debug", func() alerts.Notifier {
+	notifications.Add("default", func() alerts.Notifier {
 		return NewAlerter()
 	})
 }

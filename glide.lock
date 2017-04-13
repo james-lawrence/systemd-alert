@@ -1,5 +1,5 @@
-hash: 29d5d4862633bf794d6e9762ee1d22fddaa259ccdadc22a777e1dad57bc616f8
-updated: 2017-04-01T13:40:15.530200312-04:00
+hash: 222459aaf89c9f63644fe33a1ed5673e09dcf069b48cd0b122fc0ff61870ba01
+updated: 2017-04-12T19:30:53.466639409-04:00
 imports:
 - name: github.com/alecthomas/template
   version: 14fd436dd20c3cc65242a9f396b61bfc8a3926fc
@@ -13,6 +13,12 @@ imports:
   - dbus
 - name: github.com/godbus/dbus
   version: fe0e1d54eaeda11a9979659a8d32f459e88bee75
+- name: github.com/naoina/go-stringutil
+  version: 6b638e95a32d0c1131db0e7fe83775cbea4a0d0b
+- name: github.com/naoina/toml
+  version: ac014c6b6502388d89a85552b7208b8da7cfe104
+  subpackages:
+  - ast
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: golang.org/x/crypto

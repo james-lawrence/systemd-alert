@@ -6,11 +6,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"time"
 
 	"github.com/james-lawrence/systemd-alert/systemd"
 	"github.com/pkg/errors"
+	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
 func main() {
@@ -26,10 +26,13 @@ func main() {
 	}
 
 	app := kingpin.New("systemd-alert", "monitoring around systemd")
+
 	cmd := app.Command("slack", "send alerts to slack")
 	(&slackAlert{conn: conn}).configure(cmd)
 	cmd = app.Command("debug", "debug to stderr")
 	(&debugAlert{conn: conn}).configure(cmd)
+	cmd = app.Command("default", "default uses a configuration file to bootstrap notifications").Default()
+	(&_default{conn: conn}).configure(cmd)
 
 	if pcmd, err = app.Parse(os.Args[1:]); err != nil {
 		log.Fatalln(pcmd, errors.Wrap(err, "failed to parse commandline"))
@@ -51,4 +54,37 @@ func main() {
 
 done:
 	shutdown()
+}
+
+type agentConfig struct {
+	Frequency time.Duration
+	Ignore    []string
+}
+
+func (t *agentConfig) UnmarshalTOML(decode func(interface{}) error) error {
+	type tomlAgent struct {
+		Frequency string
+		Ignore    []string
+	}
+
+	var (
+		err  error
+		dec  tomlAgent
+		freq time.Duration
+	)
+
+	if err = decode(&dec); err != nil {
+		return err
+	}
+
+	if dec.Frequency != "" {
+		if freq, err = time.ParseDuration(dec.Frequency); err != nil {
+			return errors.Errorf("invalid agent frequency %q: %v", dec.Frequency, err)
+		}
+	}
+
+	// Assign the decoded value.
+	*t = agentConfig{Frequency: freq, Ignore: dec.Ignore}
+
+	return nil
 }

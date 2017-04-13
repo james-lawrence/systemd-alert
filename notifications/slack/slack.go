@@ -9,10 +9,17 @@ import (
 	"os"
 	"time"
 
-	"github.com/coreos/go-systemd/dbus"
+	"github.com/james-lawrence/systemd-alert"
+	"github.com/james-lawrence/systemd-alert/notifications"
 	"github.com/james-lawrence/systemd-alert/systemd"
 	"github.com/pkg/errors"
 )
+
+func init() {
+	notifications.Add("slack", func() alerts.Notifier {
+		return NewAlerter()
+	})
+}
 
 type field struct {
 	Title string `json:"title"`
@@ -28,8 +35,8 @@ type notification struct {
 }
 
 // NewAlerter configures the Alerter
-func NewAlerter() Alerter {
-	return Alerter{
+func NewAlerter() *Alerter {
+	return &Alerter{
 		client: defaultClient(),
 	}
 }
@@ -86,8 +93,4 @@ func (t Alerter) Alert(units ...*systemd.UnitStatus) {
 	if resp.StatusCode > 299 {
 		log.Println("webhook request failed with status code", resp.StatusCode)
 	}
-}
-
-func sendSlackNotification(channel, webhook, msg string, units ...*dbus.UnitStatus) {
-
 }

@@ -19,3 +19,5 @@ import:
   version: ~2.2.3
 - package: github.com/alecthomas/template
 - package: github.com/alecthomas/units
+- package: github.com/naoina/toml
+- package: github.com/naoina/go-stringutil

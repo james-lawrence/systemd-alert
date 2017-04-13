@@ -2,8 +2,7 @@
 
 monitors for failures and autorestarts and sends a notification.
 
-### natively supported systems
+### supported systems
 - slack
-
-### TODO
-- support a socket based notification system.
+- stderr (debug)
+- linux send-notify

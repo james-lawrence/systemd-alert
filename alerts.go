@@ -9,7 +9,8 @@ import (
 	"github.com/james-lawrence/systemd-alert/systemd"
 )
 
-type notifier interface {
+// Notifier interface for sending alerts.
+type Notifier interface {
 	Alert(units ...*systemd.UnitStatus)
 }
 
@@ -26,6 +27,7 @@ type runOption func(*RunConfig)
 type RunConfig struct {
 	Frequency       time.Duration
 	IgnoredServices []string
+	Notifiers       []Notifier
 }
 
 // AlertFrequency how often to dump the alerts.
@@ -42,8 +44,15 @@ func AlertIgnoreServices(services ...string) func(*RunConfig) {
 	}
 }
 
+// AlertNotifiers set the outputs for the alerts.
+func AlertNotifiers(notifiers ...Notifier) func(*RunConfig) {
+	return func(c *RunConfig) {
+		c.Notifiers = notifiers
+	}
+}
+
 // Run - runs alerts
-func Run(conn *systemd.Conn, a notifier, options ...runOption) {
+func Run(conn *systemd.Conn, options ...runOption) {
 	config := RunConfig{
 		Frequency: 1 * time.Second,
 	}
@@ -63,7 +72,10 @@ func Run(conn *systemd.Conn, a notifier, options ...runOption) {
 		IgnoreServices(config.IgnoredServices...),
 		or(FilterAutorestart, FilterFailed),
 	)
-	log.Printf("running %T\n", a)
+
+	for _, a := range config.Notifiers {
+		log.Printf("running %T\n", a)
+	}
 
 	batch := make(map[string]*systemd.UnitStatus)
 	ticker := time.NewTicker(config.Frequency)
@@ -93,7 +105,10 @@ func Run(conn *systemd.Conn, a notifier, options ...runOption) {
 				events = append(events, unit)
 			}
 
-			a.Alert(events...)
+			for _, a := range config.Notifiers {
+				a.Alert(events...)
+			}
+
 			batch = make(map[string]*systemd.UnitStatus)
 		}
 	}
