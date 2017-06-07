@@ -10,8 +10,8 @@ import (
 )
 
 type debugAlert struct {
-	conn      *systemd.Conn
-	Frequency time.Duration
+	uconn, conn *systemd.Conn
+	Frequency   time.Duration
 }
 
 func (t *debugAlert) configure(cmd *kingpin.CmdClause) {
@@ -21,5 +21,6 @@ func (t *debugAlert) configure(cmd *kingpin.CmdClause) {
 
 func (t *debugAlert) execute(c *kingpin.ParseContext) error {
 	go alerts.Run(t.conn, alerts.AlertNotifiers(debug.NewAlerter()), alerts.AlertFrequency(t.Frequency))
+	go alerts.Run(t.uconn, alerts.AlertNotifiers(debug.NewAlerter()), alerts.AlertFrequency(t.Frequency))
 	return nil
 }

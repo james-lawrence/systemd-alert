@@ -17,7 +17,7 @@ func main() {
 	var (
 		pcmd        string
 		err         error
-		conn        *systemd.Conn
+		uconn, conn *systemd.Conn
 		_, shutdown = context.WithCancel(context.Background())
 	)
 
@@ -25,14 +25,18 @@ func main() {
 		log.Fatalln(errors.Wrap(err, "failed to open systemd connection"))
 	}
 
+	if uconn, err = systemd.NewUserConnection(); err != nil {
+		log.Fatalln(errors.Wrap(err, "failed to open systemd user connection"))
+	}
+
 	app := kingpin.New("systemd-alert", "monitoring around systemd")
 
 	cmd := app.Command("slack", "send alerts to slack")
-	(&slackAlert{conn: conn}).configure(cmd)
+	(&slackAlert{uconn: uconn, conn: conn}).configure(cmd)
 	cmd = app.Command("debug", "debug to stderr")
-	(&debugAlert{conn: conn}).configure(cmd)
+	(&debugAlert{uconn: uconn, conn: conn}).configure(cmd)
 	cmd = app.Command("default", "default uses a configuration file to bootstrap notifications").Default()
-	(&_default{conn: conn}).configure(cmd)
+	(&_default{uconn: uconn, conn: conn}).configure(cmd)
 
 	if pcmd, err = app.Parse(os.Args[1:]); err != nil {
 		log.Fatalln(pcmd, errors.Wrap(err, "failed to parse commandline"))

@@ -2,10 +2,13 @@ package main
 
 import (
 	"log"
+	"os"
+	"time"
 
 	"github.com/james-lawrence/systemd-alert"
 	"github.com/james-lawrence/systemd-alert/internal/config"
 	"github.com/james-lawrence/systemd-alert/notifications"
+	"github.com/james-lawrence/systemd-alert/notifications/native"
 	"github.com/james-lawrence/systemd-alert/systemd"
 	"github.com/naoina/toml"
 	"github.com/naoina/toml/ast"
@@ -18,29 +21,54 @@ import (
 
 type _default struct {
 	conn   *systemd.Conn
+	uconn  *systemd.Conn
 	Config string
 }
 
 func (t *_default) configure(cmd *kingpin.CmdClause) {
-	cmd.Flag("config", "path to the file containing the configuration").Default("example.toml").ExistingFileVar(&t.Config)
+	cmd.Flag("config", "path to the file containing the configuration").ExistingFileVar(&t.Config)
 	cmd.Action(t.execute)
 }
 
 func (t *_default) execute(c *kingpin.ParseContext) error {
 	var (
-		err error
+		err      error
+		a        agentConfig
+		alerters []alerts.Notifier
 	)
 
-	a := agentConfig{}
-	alerters := []alerts.Notifier{}
-
-	tbl := config.Decode(t.Config)
-
-	if err = toml.UnmarshalTable(tbl.Fields["agent"].(*ast.Table), &a); err != nil {
-		return errors.Wrap(err, "failed to parse agent configuration")
+	if a, alerters, err = decodeConfig(t.Config); err != nil {
+		return err
 	}
 
-	log.Printf("agent config: %#v\n", a)
+	go alerts.Run(t.conn,
+		alerts.AlertNotifiers(alerters...),
+		alerts.AlertFrequency(a.Frequency),
+		alerts.AlertIgnoreServices(a.Ignore...),
+	)
+
+	go alerts.Run(t.uconn,
+		alerts.AlertNotifiers(alerters...),
+		alerts.AlertFrequency(a.Frequency),
+		alerts.AlertIgnoreServices(a.Ignore...),
+	)
+
+	return nil
+}
+
+func decodeConfig(path string) (a agentConfig, alerters []alerts.Notifier, err error) {
+	if _, err = os.Stat(path); os.IsNotExist(err) {
+		a = agentConfig{Frequency: time.Second}
+		alerters = append(alerters, native.NewAlerter())
+		return a, alerters, nil
+	}
+
+	tbl := config.Decode(path)
+
+	if err = toml.UnmarshalTable(tbl.Fields["agent"].(*ast.Table), &a); err != nil {
+		return a, alerters, errors.Wrap(err, "failed to parse agent configuration")
+	}
+
 	for name, configs := range tbl.Fields["notifications"].(*ast.Table).Fields {
 		var (
 			ok     bool
@@ -62,10 +90,8 @@ func (t *_default) execute(c *kingpin.ParseContext) error {
 		}
 	}
 
-	go alerts.Run(t.conn,
-		alerts.AlertNotifiers(alerters...),
-		alerts.AlertFrequency(a.Frequency),
-		alerts.AlertIgnoreServices(a.Ignore...),
-	)
-	return nil
+	if len(alerters) == 0 {
+		alerters = append(alerters, native.NewAlerter())
+	}
+	return a, alerters, nil
 }
