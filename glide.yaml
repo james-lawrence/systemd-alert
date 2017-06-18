@@ -22,3 +22,7 @@ import:
 - package: github.com/naoina/toml
 - package: github.com/naoina/go-stringutil
 - package: github.com/0xAX/notificator
+- package: github.com/influxdata/influxdb
+  version: ~1.2.4
+  subpackages:
+  - client/v2

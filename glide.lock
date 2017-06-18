@@ -1,42 +1,46 @@
-hash: e207f69bc34a90656f3763942ed875d52049b0bbfb3d37889561bd8a944bb152
-updated: 2017-04-12T21:09:45.126927315-04:00
+hash: 44fd94c161aa036ab4d75484525be15a9923ffff82b3d2b5d61081622d9ae5ba
+updated: 2017-06-18T13:15:13.278376156-04:00
 imports:
 - name: github.com/0xAX/notificator
-  version: 82e921414e037b057d5f9c5c8b9a8313dfa584de
+  version: 6bcea42e61381c13704c7fb6eb2438950f335832
 - name: github.com/alecthomas/template
-  version: 14fd436dd20c3cc65242a9f396b61bfc8a3926fc
+  version: a0175ee3bccc567396460bf5acd36800cb10c49c
   subpackages:
   - parse
 - name: github.com/alecthomas/units
   version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
 - name: github.com/godbus/dbus
-  version: fe0e1d54eaeda11a9979659a8d32f459e88bee75
+  version: 012f3c27dcbdbe5d1285634e604e4ef869d83f7d
+- name: github.com/influxdata/influxdb
+  version: 77909d7c7826afe597b12d957996d6e16cd1afaa
+  subpackages:
+  - client/v2
 - name: github.com/naoina/go-stringutil
   version: 6b638e95a32d0c1131db0e7fe83775cbea4a0d0b
 - name: github.com/naoina/toml
-  version: ac014c6b6502388d89a85552b7208b8da7cfe104
+  version: e6f5723bf2a66af014955e0888881314cf294129
   subpackages:
   - ast
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: golang.org/x/crypto
-  version: 459e26527287adbc2adcc5d0d49abff9a5f315a7
+  version: 850760c427c516be930bc91280636328f1a62286
   subpackages:
   - ssh/terminal
 - name: golang.org/x/net
-  version: 8968c61983e8f51a91b8c0ef25bf739278c89634
+  version: 59a0b19b5533c7977ddeb86b017bf507ed407b12
   subpackages:
   - context
 - name: golang.org/x/text
-  version: f28f36722d5ef2f9655ad3de1f248e3e52ad5ebd
+  version: ab6d1c143672de99b9dfde433b7f6affb278cc74
   subpackages:
   - encoding
 - name: golang.org/x/tools
-  version: 23ca8a2633c38bca2a2fd4d0c0f8523a2f266d65
+  version: 5128de728888ea5cc98be50b4efaabc4d3491274
   subpackages:
   - go/buildutil
 - name: gopkg.in/alecthomas/kingpin.v2
-  version: e9044be3ab2a8e11d4e1f418d12f0790d57e8d70
+  version: 7f0871f2e17818990e4eed73f9b5c2f429501228
 - name: gopkg.in/yaml.v1
   version: 9f9df34309c04878acc86042b16630b0f696e1de
 testImports: []

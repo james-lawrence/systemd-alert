@@ -58,7 +58,7 @@ func (o osxNotificator) push(title string, text string, iconPath string) *exec.C
 	// else, fall back to osascript. (Mavericks and later.)
 
 	if term_notif == true {
-		return exec.Command("terminal-notifier", "-title", o.AppName, "-message", text, "-subtitle", title)
+		return exec.Command("terminal-notifier", "-title", o.AppName, "-message", text, "-subtitle", title, "-appIcon", iconPath)
 	} else if os_version_check == true {
 		notification := fmt.Sprintf("display notification \"%s\" with title \"%s\" subtitle \"%s\"", text, o.AppName, title)
 		return exec.Command("osascript", "-e", notification)
@@ -133,17 +133,8 @@ func New(o Options) *Notificator {
 
 func CheckTermNotif() bool {
 	// Checks if terminal-notifier exists, and is accessible.
-
-	check_term_notif := exec.Command("which", "terminal-notifier")
-	err := check_term_notif.Start()
-
-	if err != nil {
+	if err := exec.Command("which", "terminal-notifier").Run(); err != nil {
 		return false
-	} else {
-		err = check_term_notif.Wait()
-		if err != nil {
-			return false
-		}
 	}
 	// no error, so return true. (terminal-notifier exists)
 	return true

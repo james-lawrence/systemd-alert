@@ -16,7 +16,10 @@ import (
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 
 	// load native into the registry.
+	_ "github.com/james-lawrence/systemd-alert/notifications/debug"
+	_ "github.com/james-lawrence/systemd-alert/notifications/influxdb"
 	_ "github.com/james-lawrence/systemd-alert/notifications/native"
+	_ "github.com/james-lawrence/systemd-alert/notifications/slack"
 )
 
 type _default struct {
