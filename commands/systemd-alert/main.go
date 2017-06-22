@@ -26,7 +26,7 @@ func main() {
 	}
 
 	if uconn, err = systemd.NewUserConnection(); err != nil {
-		log.Fatalln(errors.Wrap(err, "failed to open systemd user connection"))
+		log.Println(errors.Wrap(err, "failed to open systemd user connection"))
 	}
 
 	app := kingpin.New("systemd-alert", "monitoring around systemd")
