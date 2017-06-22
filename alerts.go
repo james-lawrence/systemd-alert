@@ -51,6 +51,16 @@ func AlertNotifiers(notifiers ...Notifier) func(*RunConfig) {
 	}
 }
 
+// SafeRun - ensures there is a connection before attempting to
+// run.
+func SafeRun(conn *systemd.Conn, options ...runOption) {
+	if conn == nil {
+		return
+	}
+
+	Run(conn, options...)
+}
+
 // Run - runs alerts
 func Run(conn *systemd.Conn, options ...runOption) {
 	config := RunConfig{

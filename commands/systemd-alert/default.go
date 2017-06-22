@@ -50,12 +50,11 @@ func (t *_default) execute(c *kingpin.ParseContext) error {
 		alerts.AlertIgnoreServices(a.Ignore...),
 	)
 
-	go alerts.Run(t.uconn,
+	go alerts.SafeRun(t.uconn,
 		alerts.AlertNotifiers(alerters...),
 		alerts.AlertFrequency(a.Frequency),
 		alerts.AlertIgnoreServices(a.Ignore...),
 	)
-
 	return nil
 }
 

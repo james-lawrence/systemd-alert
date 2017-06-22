@@ -30,6 +30,6 @@ func (t *slackAlert) configure(cmd *kingpin.CmdClause) {
 
 func (t *slackAlert) execute(c *kingpin.ParseContext) error {
 	go alerts.Run(t.conn, alerts.AlertNotifiers(t.Alerter), alerts.AlertFrequency(t.Frequency), alerts.AlertIgnoreServices(t.IgnoreSet...))
-	go alerts.Run(t.uconn, alerts.AlertNotifiers(t.Alerter), alerts.AlertFrequency(t.Frequency), alerts.AlertIgnoreServices(t.IgnoreSet...))
+	go alerts.SafeRun(t.uconn, alerts.AlertNotifiers(t.Alerter), alerts.AlertFrequency(t.Frequency), alerts.AlertIgnoreServices(t.IgnoreSet...))
 	return nil
 }
