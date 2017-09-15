@@ -103,4 +103,5 @@ func (t *Alerter) Alert(units ...*systemd.UnitStatus) {
 		log.Println(errors.Wrap(err, "failed to write events"))
 		return
 	}
+	log.Println("events written to endpoint")
 }
