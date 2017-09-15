@@ -60,7 +60,7 @@ func (t *Alerter) Alert(units ...*systemd.UnitStatus) {
 		}
 
 		if strings.HasPrefix(t.Address, "http") {
-			if t.client, err = client.NewHTTPClient(client.HTTPConfig{}); err != nil {
+			if t.client, err = client.NewHTTPClient(client.HTTPConfig{Addr: t.Address}); err != nil {
 				log.Println("failed to create http client", err)
 			}
 			return
