@@ -24,7 +24,7 @@ func NewAlerter() *Alerter {
 		Address:   "http://localhost:8086",
 		Precision: "ns",
 		Database:  "influxdb",
-		Metric:    "systemd-unit-failures",
+		Metric:    "systemd",
 		Once:      &sync.Once{},
 	}
 }
