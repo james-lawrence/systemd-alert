@@ -2,9 +2,10 @@
 
 monitors for failures and autorestarts and sends a notification.
 
-### supported systems
-- slack
+### supported notifications
 - stderr (debug)
+- slack
+- influxdb / telegraf
 - linux send-notify
 
 ### example configuration
@@ -26,4 +27,8 @@ monitors for failures and autorestarts and sends a notification.
 	channel = "#engineering"
 	webhook = "http://example.com"
 
+[[notifications.influxdb]]
+	address  = "unix:///run/telegraf-ops/telegraf.sock"
+	metric   = "systemd"
+	database = "ops"
 ```
