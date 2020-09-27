@@ -1,0 +1,14 @@
+[agent]
+	frequency = "1s"
+	ignore = [
+		"dnf-makecache.service",
+		"openvpn@server.service",
+		"${USER}.service",
+	]
+
+[[notifications.default]]
+
+[[notifications.debug]]
+
+[[notifications.influxdb]]
+	Address = "unix:///tmp/telegraf.sock"
