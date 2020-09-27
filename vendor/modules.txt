@@ -1,6 +1,9 @@
-# github.com/0xAX/notificator v0.0.0-20170528181308-6bcea42e6138
+# github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38
 ## explicit
-github.com/0xAX/notificator
+# github.com/alecthomas/colour v0.1.0
+## explicit
+# github.com/alecthomas/repr v0.0.0-20200925101113-8eaab51b74bf
+## explicit
 # github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 ## explicit
 github.com/alecthomas/template
@@ -22,6 +25,10 @@ github.com/godbus/dbus/v5
 github.com/influxdata/influxdb/client/v2
 github.com/influxdata/influxdb/models
 github.com/influxdata/influxdb/pkg/escape
+# github.com/kylelemons/godebug v1.1.0
+## explicit
+# github.com/mattn/go-isatty v0.0.12
+## explicit
 # github.com/naoina/go-stringutil v0.1.0
 ## explicit
 github.com/naoina/go-stringutil
@@ -32,16 +39,10 @@ github.com/naoina/toml/ast
 # github.com/pkg/errors v0.8.0
 ## explicit
 github.com/pkg/errors
-# golang.org/x/crypto v0.0.0-20170613210332-850760c427c5
+# github.com/sergi/go-diff v1.1.0
 ## explicit
-# golang.org/x/net v0.0.0-20170605033737-59a0b19b5533
-## explicit
-# golang.org/x/text v0.0.0-20170606172603-ab6d1c143672
-## explicit
-# golang.org/x/tools v0.0.0-20170616214954-5128de728888
+# github.com/stretchr/testify v1.6.1
 ## explicit
 # gopkg.in/alecthomas/kingpin.v2 v2.2.4
 ## explicit
 gopkg.in/alecthomas/kingpin.v2
-# gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0
-## explicit

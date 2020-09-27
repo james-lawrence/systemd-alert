@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/james-lawrence/systemd-alert"
+	alerts "github.com/james-lawrence/systemd-alert"
 	"github.com/james-lawrence/systemd-alert/internal/config"
 	"github.com/james-lawrence/systemd-alert/notifications"
 	"github.com/james-lawrence/systemd-alert/notifications/native"
@@ -61,7 +61,7 @@ func (t *_default) execute(c *kingpin.ParseContext) error {
 func decodeConfig(path string) (a agentConfig, alerters []alerts.Notifier, err error) {
 	if _, err = os.Stat(path); os.IsNotExist(err) {
 		a = agentConfig{Frequency: time.Second}
-		alerters = append(alerters, native.NewAlerter())
+		alerters = append(alerters, native.DefaultAlerter())
 		return a, alerters, nil
 	}
 
@@ -93,7 +93,9 @@ func decodeConfig(path string) (a agentConfig, alerters []alerts.Notifier, err e
 	}
 
 	if len(alerters) == 0 {
-		alerters = append(alerters, native.NewAlerter())
+		if a := native.DefaultAlerter(); a != nil {
+			alerters = append(alerters, a)
+		}
 	}
 	return a, alerters, nil
 }
